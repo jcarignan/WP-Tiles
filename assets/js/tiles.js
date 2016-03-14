@@ -356,9 +356,14 @@ Tiles.UniformTemplates = {
 };
 (function($) {
 
-    var Grid = Tiles.Grid = function(element) {
+    var Grid = Tiles.Grid = function(element, opts) {
+
+        opts = typeof opts !== 'undefined' ? opts:{};
+        opts.fullHeight = typeof opts.fullHeight !== 'undefined' ? opts.fullHeight:false;
 
         this.$el = $(element);
+
+        this.usesContainerHeight = opts.fullHeight;
 
         // animation lasts 500 ms by default
         this.animationDuration = 500;
@@ -377,6 +382,7 @@ Tiles.UniformTemplates = {
 
         // actual width and height of a cell in the grid
         this.cellSize = 0;
+        this.cellHeight = 0;
 
         // number of tile cell columns
         this.numCols = 1;
@@ -400,6 +406,10 @@ Tiles.UniformTemplates = {
         return this.$el.width();
     };
 
+    Grid.prototype.getContainerHeight = function() {
+        return this.$el.parent().parent().height();
+    };
+
     // gets the number of columns during a resize
     Grid.prototype.resizeColumns = function() {
         var panelWidth = this.getContentWidth();
@@ -416,6 +426,12 @@ Tiles.UniformTemplates = {
             this.cellPadding;
     };
 
+    // gets the cell size during a grid resize
+    Grid.prototype.getCellHeight = function() {
+        var panelHeight = this.getContainerHeight();
+        return (panelHeight + this.cellPadding) / this.template.numRows - this.cellPadding;
+    };
+
     Grid.prototype.resize = function() {
 
         var newCols = this.resizeColumns();
@@ -428,6 +444,11 @@ Tiles.UniformTemplates = {
         if (this.cellSize !== newCellSize && newCellSize > 0) {
             this.cellSize = newCellSize;
             this.isDirty = true;
+        }
+
+        var newCellHeight = this.getCellHeight();
+        if (this.cellHeight !== newCellHeight && newCellHeight > 0) {
+            this.cellHeight = newCellHeight;
         }
     };
 
@@ -648,6 +669,7 @@ Tiles.UniformTemplates = {
             pageSize = this.priorityPageSize,
             duration = this.animationDuration,
             cellPlusPadding = this.cellSize + this.cellPadding,
+            cellHeightPlusPadding = this.usesContainerHeight ? this.cellHeight + this.cellPadding:cellPlusPadding,
             tileIndex = 0,
             appendDelay = 0,
             viewRect = new Tiles.Rectangle(
@@ -683,9 +705,9 @@ Tiles.UniformTemplates = {
                 cellRect = priorityRects[i];
                 pixelRect = new Tiles.Rectangle(
                     cellRect.x * cellPlusPadding,
-                    cellRect.y * cellPlusPadding,
+                    cellRect.y * cellHeightPlusPadding,
                     (cellRect.width * cellPlusPadding) - this.cellPadding,
-                    (cellRect.height * cellPlusPadding) - this.cellPadding);
+                    (cellRect.height * cellHeightPlusPadding) - this.cellPadding);
 
                 tile.resize(
                     cellRect,

@@ -78,7 +78,8 @@ class Shortcode
             'extra_classes_grid_selector'
                                => $defaults['extra_classes_grid_selector'],
 
-            'full_width'       => $defaults['full_width']
+            'full_width'       => $defaults['full_width'],
+            'full_height'      => $defaults['full_height']
 
         ), $original_atts );
 
@@ -144,7 +145,8 @@ class Shortcode
 
             'pagination'       => $atts['pagination'],
 
-            'full_width'       => $atts['full_width']
+            'full_width'       => $atts['full_width'],
+            'full_height'       => $atts['full_height']
         );
 
         if ( $atts['breakpoint'] ) {

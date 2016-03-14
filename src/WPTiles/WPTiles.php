@@ -284,6 +284,9 @@ class WPTiles extends Abstracts\WPSingleton
         if ( $opts['full_width'] )
             $opts['extra_classes'][] = 'wp-tiles-full-width';
 
+        if ( $opts['full_height'] )
+            $opts['extra_classes'][] = 'wp-tiles-full-height';
+
         $opts['extra_classes'] = implode( ' ', apply_filters( 'wp_tiles_container_classes', $opts['extra_classes'] ) );
         $opts['extra_classes_grid_selector'] = implode( ' ', apply_filters( 'wp_tiles_grid_selector_classes', $opts['extra_classes_grid_selector'] ) );
 

@@ -17,6 +17,11 @@
     },
 
     resizeParent: function($el, padding) {
+      var $parent = $el.parent('.wp-tiles-container');
+      if ($parent.is('.wp-tiles-full-height'))
+      {
+          return;
+      }
       var tiles = $el.children('.wp-tiles-tile'),
           tileOffsetTop = parseInt ( $el.offset().top ),
           max = 0, newHeight;
@@ -30,7 +35,7 @@
 
       newHeight = max - tileOffsetTop + parseInt(padding) + "px";
 
-      $el.parent('.wp-tiles-container').css('height', newHeight );
+      $parent.css('height', newHeight);
     }
   };
 
@@ -147,8 +152,13 @@
 
       opts.grids = grids;
 
+      var gridOptions = {
+          fullHeight: typeof opts.full_height !== 'undefined' && (opts.full_height === true || opts.full_height === 'true'),
+      };
+
       // Setup the Tiles grid
-      grid = $.extend(new Tiles.Grid($el),{
+      grid = $.extend(new Tiles.Grid($el, gridOptions),{
+
         cellPadding: parseInt(opts.padding),
 
         template: get_template(),
@@ -308,15 +318,14 @@
       style_tiles();
 
       // when the window resizes, redraw the grid
-      $(window).resize($.wptiles.debounce(function() {
+      $(window).resize(function() {
           // @todo Only resize if template is the same?
           grid.template = get_template();
 
           grid.isDirty = true;
           grid.resize();
-
           grid.redraw(opts.animate_resize, onresize);
-      }, 200));
+      });
 
 
       /**

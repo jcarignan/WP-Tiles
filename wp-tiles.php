@@ -1,9 +1,9 @@
 <?php
 /*
-  Plugin Name: WP Tiles
+  Plugin Name: WP Tiles - jcarignan's fork
   Plugin URI: http://wp-tiles.com/
   Description: Add fully customizable dynamic tiles to your WordPress posts and pages.
-  Version: 1.1.1
+  Version: 999999999999999
   Author: Mike Martel
   Author URI: http://trenvo.com/
   Requires at least: 3.6

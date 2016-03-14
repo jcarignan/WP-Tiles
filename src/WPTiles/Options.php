@@ -59,7 +59,8 @@ class Options
         'extra_classes_grid_selector' => array(),
 
         // Experimental options, only available in shortcode or PHP
-        'full_width'    => false
+        'full_width'    => false,
+        'full_height'    => false
     );
 
     /**

@@ -53,6 +53,11 @@
 	height: auto;
 	background: none;
 	overflow: visible;
+
+    &.wp-tiles-full_height {
+        height: 100%;
+        overflow: hidden;
+    }
 }
 
 .wp-tiles-grid {
