@@ -409,8 +409,8 @@ class WPTiles extends Abstracts\WPSingleton
 
             ?>
 
-                <div class='<?php echo implode( ' ', $tile_classes ) ?>' id='tile-<?php echo $post->ID ?>'>
-                <?php if ( 'post' == $opts['link'] ) : ?>
+                <div class='<?php echo implode( ' ', $tile_classes ) ?>' id='tile-<?php echo $post->ID ?>' data-post-type='<?php echo get_post_type($post->ID)?>'>
+                <?php if ( 'post' == $opts['link'] && get_post_type($post->ID) == 'page' || get_post_type($post->ID) == 'post') : ?>
 
                     <a href="<?php echo $this->_get_permalink( $post->ID ) ?>" title="<?php echo esc_attr( apply_filters( 'the_title', $post->post_title, $post->ID ) ) ?>"<?php echo $link_attributes_string ?>>
                 <?php elseif ( 'file' == $opts['link'] ) : ?>
