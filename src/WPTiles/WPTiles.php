@@ -406,13 +406,32 @@ class WPTiles extends Abstracts\WPSingleton
             foreach( $link_attributes as $att => $value ) {
                 $link_attributes_string .= " $att='$value'";
             }
-
+                // if link === post, first check if
+                if ('post' == $opts['link'])
+                {
+                    $postID = $post->ID;
+                    $linkType = get_field('link-type', $postID);
+                    $linkTo = get_field('link-to', $postID);
+                    $link;
+                    if ($linkType === 'none')
+                    {
+                        array_push($tile_classes, 'without-link');
+                        $link = null;
+                    }
+                    else if (strlen($linkTo))
+                    {
+                        array_push($tile_classes, 'with-link');
+                        $link = $linkTo;
+                    } else {
+                        $link = $this->_get_permalink($postID);
+                    }
+                }
             ?>
 
-                <div class='<?php echo implode( ' ', $tile_classes ) ?>' id='tile-<?php echo $post->ID ?>' data-post-type='<?php echo get_post_type($post->ID)?>'>
-                <?php if ( 'post' == $opts['link'] && get_post_type($post->ID) == 'page' || get_post_type($post->ID) == 'post') : ?>
+                <div class='<?php echo implode( ' ', $tile_classes ) ?>' id='tile-<?php echo $post->ID ?>'>
+                <?php if ( 'post' == $opts['link'] && $link !== null) : ?>
 
-                    <a href="<?php echo $this->_get_permalink( $post->ID ) ?>" title="<?php echo esc_attr( apply_filters( 'the_title', $post->post_title, $post->ID ) ) ?>"<?php echo $link_attributes_string ?>>
+                    <a href="<?php echo $link ?>" title="<?php echo esc_attr( apply_filters( 'the_title', $post->post_title, $post->ID ) ) ?>"<?php echo $link_attributes_string ?>>
                 <?php elseif ( 'file' == $opts['link'] ) : ?>
 
                     <a href="<?php echo $this->get_first_image( $post, 'full' ) ?>" title="<?php echo esc_attr( apply_filters( 'the_title', $post->post_title, $post->ID ) ) ?>"<?php echo $link_attributes_string ?>>
