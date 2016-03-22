@@ -411,17 +411,23 @@ class WPTiles extends Abstracts\WPSingleton
                 {
                     $postID = $post->ID;
                     $linkType = get_field('link-type', $postID);
-                    $linkTo = get_field('link-to', $postID);
+                    $linkPostId = get_field('link-post-id', $postID);
+                    $linkUrl = get_field('link-url', $postID);
                     $link;
                     if ($linkType === 'none')
                     {
                         array_push($tile_classes, 'without-link');
                         $link = null;
                     }
-                    else if (strlen($linkTo))
+                    else if ($linkType === 'post-id' && strlen($linkPostId))
                     {
-                        array_push($tile_classes, 'with-link');
-                        $link = $linkTo;
+                        array_push($tile_classes, 'with-post-id');
+                        $link = $linkPostId;
+                    }
+                    else if ($linkType === 'url' && strlen($linkUrl))
+                    {
+                        array_push($tile_classes, 'with-url');
+                        $link = $linkUrl;
                     } else {
                         $link = $this->_get_permalink($postID);
                     }
